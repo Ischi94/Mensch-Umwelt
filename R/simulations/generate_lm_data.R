@@ -17,12 +17,12 @@ dat_div %>%
 plot_div <- dat_div %>%
   add_row(tibble(island = 51, diversity = NA, size = 0)) %>% 
   ggplot(aes(size, diversity)) +
-  geom_point(size = 2, shape = 21, fill = "#C2A337") +
-  geom_smooth(method = "lm", colour = "#155560", 
+  geom_point(size = 2, shape = 21, fill = "#155560") +
+  geom_smooth(method = "lm", colour = "orange", 
               # method.args = list(family = "poisson"),
               fullrange  = TRUE) +
   theme_minimal() +
-  labs(x = "Island size [km]", y = "Diversity")
+  labs(x = "Inselgröße [km]", y = "Diversität")
 
 # save into figures folder
 ggsave(plot = plot_div, filename = "diversity_lm_1.png", path = here("figures"), bg = "white",
@@ -32,12 +32,12 @@ ggsave(plot = plot_div, filename = "diversity_lm_1.png", path = here("figures"),
 plot_div <- dat_div %>%
   add_row(tibble(island = 51, diversity = NA, size = 0)) %>% 
   ggplot(aes(size, diversity)) +
-  geom_point(size = 2, shape = 21, fill = "#C2A337") +
-  geom_smooth(method = "lm", colour = "#155560", 
+  geom_point(size = 2, shape = 21, fill = "#155560") +
+  geom_smooth(method = "lm", colour = "orange", 
               formula = 'y ~1', 
               fullrange  = TRUE) +
   theme_minimal() +
-  labs(x = "Island size [km]", y = "Diversity")
+  labs(x = "Inselgröße [km]", y = "Diversität")
 
 # save into figures folder
 ggsave(plot = plot_div, filename = "diversity_lm_2.png", path = here("figures"), bg = "white",
@@ -51,10 +51,10 @@ dat_perm <- map_df(1:20, ~ mutate(dat_div, size = sample(size = 50, dat_div$size
 # create visualisaion
 plot_div_perm <- dat_perm %>%
   ggplot(aes(size, diversity, group = run)) +
-  geom_point(size = 2, shape = 21, fill = "#C2A337") +
-  geom_smooth(method = "lm", se = FALSE, colour = "#155560") +
+  geom_point(size = 2, shape = 21, fill = "#155560") +
+  geom_smooth(method = "lm", se = FALSE, colour = "orange") +
   theme_minimal() +
-  labs(x = "Island size [km]", y = "Diversity") 
+  labs(x = "Inselgröße [km]", y = "Diversität") 
 
 
 # create gif
