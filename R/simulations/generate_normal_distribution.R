@@ -21,7 +21,7 @@ dat_walks <- map_df(1:nr_reps, ~random_walk()) %>%
 
 # create visualisaion
 plot_walks <- dat_walks %>%
-  mutate(col_id = if_else(iter == 100, "#C2A337", "#155560"), 
+  mutate(col_id = if_else(iter == 100, "#155560", "orange"), 
          alpha_id = if_else(iter == 100, 1, 0.2)) %>% 
   ggplot(aes(step, pos, 
              group = iter, 
@@ -31,8 +31,8 @@ plot_walks <- dat_walks %>%
   scale_color_identity() +
   scale_alpha_identity() +
   theme_minimal() +
-  labs(y = "Position in field", 
-       x = "Step number")
+  labs(y = "Position im Feld", 
+       x = "Anzahl an Schritten")
 
 # save into figures folder
 ggsave(plot = plot_walks, filename = "normal_dist_sim.png", path = here("figures"),
@@ -42,12 +42,12 @@ ggsave(plot = plot_walks, filename = "normal_dist_sim.png", path = here("figures
 # create histogram
 plot_hist_walks <- dat_walks %>% 
   ggplot(aes(pos)) +
-  geom_density(colour = "#155560", 
+  geom_density(colour = "orange", 
                linewidth = 2) +
   stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) +
   theme_minimal() +
-  labs(y = "Density", 
-       x = "Position in field")
+  labs(y = "Häufigkeit", 
+       x = "Position im Feld")
 
 # save into figures folder
 ggsave(plot = plot_hist_walks, filename = "normal_dist_hist.png", path = here("figures"),
@@ -63,3 +63,20 @@ anim_save(animation = gif_walks, filename = "normal_dist_sim.gif", path = here("
           nframes = 400, fps = 20, width = 1600, height = 800, res = 200, 
           end_pause = 50,
           renderer = gifski_renderer())
+
+
+# normal distribution
+plot_norm <- ggplot(data = data.frame(x = c(40, 160)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 100, sd = 20), 
+                colour = "orange", 
+                linewidth = 1) + 
+  geom_vline(xintercept = 100, linewidth = 1) +
+  labs(y = "Häufigkeit", 
+       x = "IQ-Werte", 
+       title = "Normalverteilung") +
+  theme_minimal()
+
+# save into figures folder
+ggsave(plot = plot_norm, filename = "normal_dist.png", path = here("figures"),
+       bg = "white",
+       width = 100, height = 100, units = "mm")
