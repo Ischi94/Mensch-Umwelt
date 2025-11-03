@@ -38,3 +38,11 @@ mod1 <-
 # Verwende erneut die Funktion summary(), um dir die Modellergebnisse anzusehen.
 # Wie interpretierst du die Ergebnisse des Modells?
   
+  
+# plote die Daten mithilfe der plot() Funktion. Als erstes müssen wir bestimmen was 
+# auf die x-Achse (dat_div$size) und was auf die y-Achse (dat_div$diversity) kommt. 
+# Die Achsen können wir mit den Argumenten xlab = "" und ylab = "" beschriften. 
+
+  
+# Füge eine Regressionslinie mithilfe der Funktion abline() hinzu. 
+# Verwende hierfür mod1 als Argument
