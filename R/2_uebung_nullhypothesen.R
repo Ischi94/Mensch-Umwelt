@@ -3,18 +3,18 @@ library(here)
 
 # lade den diversitäts-datensatz aus der letzten stunde
 # er liegt im unterordner data/ und heißt "island_diversity.rds"
-dat_div <- readRDS(here())
+dat_div <- readRDS(here("data", "island_diversity.rds"))
 
-# baue ein einfaches lineares modell mit diversität (diversity) als zielvariable
-# und inselgröße (size) als erklärende variable und speichere das modell als mod1
-mod1 <- lm()
+# baue ein einfaches lineares modell mit diversität (diversity) als zielvariable (y)
+# und inselgröße (size) als erklärende variable (x) und speichere das modell als mod1
+mod1 <- lm(diversity ~ size, data = dat_div)
 
-# extrahiere die geschätzten koeffizienten aus dem modell
+# extrahiere die geschätzten koeffizienten aus dem modell mit der coef() Funktion
 # und speichere sie in dat_coef
-dat_coef <- 
+dat_coef <- coef(mod1)
 
 # filtere den schätzwert für die steigung (slope) heraus und interpretiere ihn
-
+dat_coef["size"]
   
 # lies die dokumentation der funktion confint mit ?confint
 ?confint
@@ -22,7 +22,7 @@ dat_coef <-
 # verwende nun die funktion confint, um das 95%-konfidenzintervall zu berechnen
 # (entspricht einem alpha-wert von 0.05) für die steigung, also den effekt der inselgröße auf die diversität
 # speichere das ergebnis in conf_slope
-conf_slope <- 
+conf_slope <- confint(mod1, parm = "size")
   
   
 # überschneidet sich das konfidenzintervall mit null?
