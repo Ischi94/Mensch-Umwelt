@@ -1,7 +1,7 @@
 library(MASS)
 library(tidyverse)
 library(here)
-
+library(gganimate)
 
 
 # load island dataset
@@ -159,9 +159,7 @@ mod_binom <- glm(human_presence ~ size,
                  family = binomial)
 
 # get log odds
-dat_binom <- data.frame(size = seq(min(dat_div_fin$size),
-                                   max(dat_div_fin$size),
-                                   length.out = 50)) %>% 
+dat_binom <- dat_div_fin %>% 
   mutate(log_odd = predict(mod_binom, newdata = ., type = "link"), 
          log_odd_se = predict(mod_binom, newdata = ., type = "link", se.fit = TRUE)[[2]], 
          log_odd_low = log_odd - 1.96 * log_odd_se, 
@@ -172,17 +170,15 @@ dat_binom <- data.frame(size = seq(min(dat_div_fin$size),
   mutate(log_point = runif(1, log_point_low, log_point_high))
 
 # plot
-plot_log_raw <- ggplot() +
+plot_log_raw <- ggplot(data = dat_binom) +
   geom_point(aes(size, log_point),
-             size = 2, shape = 21, fill = "#155560", 
-             data = dat_binom) +
+             size = 2, shape = 21, fill = "#155560") +
   geom_ribbon(aes(ymin = log_odd_low, ymax = log_odd_high, y = log_odd, 
                   x = size), 
               fill = "grey20", 
-              colour = "white",
-              alpha = 0.2,
-              data = dat_binom) +
-  geom_line(data = dat_binom, aes(size, log_odd), 
+              colour = NA,
+              alpha = 0.2) +
+  geom_line(aes(size, log_odd), 
             colour = "orange", linewidth = 1.2) +
   theme_minimal() +
   labs(y = "Log-odds der Menschenpräsenz", x = "Inselgröße [km]")
@@ -190,3 +186,30 @@ plot_log_raw <- ggplot() +
 # save into figures folder
 ggsave(plot = plot_log_raw, filename = "diversity_glm_5.png", path = here("figures"), bg = "white",
        width = 200, height = 100, units = "mm")
+
+
+# animation
+gif_binom <- dat_binom %>% 
+  ungroup() %>% 
+  select(size, human_presence, log_point) %>% 
+  mutate(log_point = (log_point - min(log_point)) / (max(log_point) - min(log_point))) %>% 
+  pivot_longer(cols = c(human_presence, log_point)) %>% 
+  left_join(tibble(name = c("human_presence", "log_point"), 
+                   p_title = c("Original", "Transformiert"))) %>% 
+  ggplot(aes(size, value)) +
+  geom_point(size = 2, shape = 21, fill = "#155560") +
+  labs(y = NULL, x = "Inselgröße [km]") +
+  theme_minimal() +
+  theme(axis.line.y = element_blank(), 
+        axis.text.y = element_blank()) +
+  ggtitle('{closest_state}') +
+  transition_states(p_title,
+                    transition_length = 2,
+                    state_length = 1) +
+  ease_aes("cubic-in-out")
+
+# save animation into figures folder
+anim_save(animation = gif_binom, filename = "glm.gif", path = here("figures"),
+          nframes = 200, fps = 20, width = 1200, height = 1000, res = 200, 
+          end_pause = 1,
+          renderer = gifski_renderer())
