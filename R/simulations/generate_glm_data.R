@@ -94,8 +94,12 @@ plot_bin <- dat_div_fin %>%
   scale_x_continuous(breaks = c(0, 1), 
                      labels = c("Nein", "Ja")) +
   theme_minimal() +
-  labs(y = "Diversität", x = "Menschenpräsenz")
+  labs(y = "Diversität", x = "Menschenpräsenz", 
+       title = "Binäres Beispiel")
 
+# save into figures folder
+ggsave(plot = plot_bin, filename = "diversity_glm_1.png", path = here("figures"), bg = "white",
+       width = 200, height = 100, units = "mm")
 
 # forest_cover 
 plot_prop <- dat_div_fin %>%
@@ -105,7 +109,13 @@ plot_prop <- dat_div_fin %>%
   geom_smooth(method = "lm", colour = "orange",
               fullrange  = TRUE) +
   theme_minimal() +
-  labs(y = "Diversität", x = "Proportionale Waldbedeckung")
+  labs(y = "Diversität", x = "Proportionale Waldbedeckung", 
+       title = "Proportionales Beispiel")
+
+# save into figures folder
+ggsave(plot = plot_prop, filename = "diversity_glm_2.png", path = here("figures"), bg = "white",
+       width = 200, height = 100, units = "mm")
+
 
 # ecosystem
 plot_cat <- dat_div_fin %>%
@@ -119,6 +129,64 @@ plot_cat <- dat_div_fin %>%
               method = "lm", colour = "orange",
               fullrange  = TRUE) +
   theme_minimal() +
-  labs(y = "Diversität", x = "Ökosystem")
+  labs(y = "Diversität", x = "Ökosystem", 
+       title = "Kategorisches Beispiel")
 
-lm(size ~ human_presence, data = dat_div_fin)
+# save into figures folder
+ggsave(plot = plot_cat, filename = "diversity_glm_3.png", path = here("figures"), bg = "white",
+       width = 200, height = 100, units = "mm")
+
+
+# logistic regression
+plot_log <- dat_div_fin %>%
+  ggplot(aes(size, human_presence)) +
+  geom_point(size = 2, shape = 21, fill = "#155560", 
+             position = position_jitter(height = 0.03, seed = 1)) +
+  geom_smooth(method = "glm", colour = "orange",
+              method.args = list(family = "binomial"),
+              fullrange  = TRUE) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  theme_minimal() +
+  labs(y = "P(Menschenpräsenz)", x = "Inselgröße [km]")
+
+# save into figures folder
+ggsave(plot = plot_log, filename = "diversity_glm_4.png", path = here("figures"), bg = "white",
+       width = 200, height = 100, units = "mm")
+
+# logit-vals
+mod_binom <- glm(human_presence ~ size, 
+                 data = dat_div_fin, 
+                 family = binomial)
+
+# get log odds
+dat_binom <- data.frame(size = seq(min(dat_div_fin$size),
+                                   max(dat_div_fin$size),
+                                   length.out = 50)) %>% 
+  mutate(log_odd = predict(mod_binom, newdata = ., type = "link"), 
+         log_odd_se = predict(mod_binom, newdata = ., type = "link", se.fit = TRUE)[[2]], 
+         log_odd_low = log_odd - 1.96 * log_odd_se, 
+         log_odd_high = log_odd + 1.96 * log_odd_se, 
+         log_point_low = log_odd - 6 * log_odd_se, 
+         log_point_high = log_odd + 6 * log_odd_se) %>% 
+  rowwise() %>% 
+  mutate(log_point = runif(1, log_point_low, log_point_high))
+
+# plot
+plot_log_raw <- ggplot() +
+  geom_point(aes(size, log_point),
+             size = 2, shape = 21, fill = "#155560", 
+             data = dat_binom) +
+  geom_ribbon(aes(ymin = log_odd_low, ymax = log_odd_high, y = log_odd, 
+                  x = size), 
+              fill = "grey20", 
+              colour = "white",
+              alpha = 0.2,
+              data = dat_binom) +
+  geom_line(data = dat_binom, aes(size, log_odd), 
+            colour = "orange", linewidth = 1.2) +
+  theme_minimal() +
+  labs(y = "Log-odds der Menschenpräsenz", x = "Inselgröße [km]")
+
+# save into figures folder
+ggsave(plot = plot_log_raw, filename = "diversity_glm_5.png", path = here("figures"), bg = "white",
+       width = 200, height = 100, units = "mm")
