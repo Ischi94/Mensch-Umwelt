@@ -1,4 +1,3 @@
-library(MASS)
 library(tidyverse)
 library(here)
 library(gganimate)
@@ -153,6 +152,7 @@ plot_log <- dat_div_fin %>%
 ggsave(plot = plot_log, filename = "diversity_glm_4.png", path = here("figures"), bg = "white",
        width = 200, height = 100, units = "mm")
 
+
 # logit-vals
 mod_binom <- glm(human_presence ~ size, 
                  data = dat_div_fin, 
@@ -187,6 +187,26 @@ plot_log_raw <- ggplot(data = dat_binom) +
 ggsave(plot = plot_log_raw, filename = "diversity_glm_5.png", path = here("figures"), bg = "white",
        width = 200, height = 100, units = "mm")
 
+
+# smaller versions
+ggsave(plot = plot_log, filename = "diversity_glm_6.png", path = here("figures"), bg = "white",
+       width = 200, height = 60, units = "mm")
+
+ggsave(plot = plot_log_raw, filename = "diversity_glm_7.png", path = here("figures"), bg = "white",
+       width = 200, height = 60, units = "mm")
+
+# odds
+# plot
+plot_odds <- dat_binom %>%
+  mutate(log_point = exp(log_point)) %>% 
+  ggplot() +
+  geom_point(aes(size, log_point),
+             size = 2, shape = 21, fill = "#155560") +
+  theme_minimal() +
+  labs(y = "Odds der Menschenpräsenz", x = "Inselgröße [km]")
+
+ggsave(plot = plot_odds, filename = "diversity_glm_8.png", path = here("figures"), bg = "white",
+       width = 200, height = 60, units = "mm")
 
 # animation
 gif_binom <- dat_binom %>% 
