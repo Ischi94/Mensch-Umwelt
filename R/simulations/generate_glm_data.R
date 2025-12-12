@@ -2,7 +2,6 @@ library(tidyverse)
 library(here)
 library(gganimate)
 
-
 # load island dataset
 dat_div <- readRDS(here("data", "island_diversity.rds"))
 
@@ -233,3 +232,36 @@ anim_save(animation = gif_binom, filename = "glm.gif", path = here("figures"),
           nframes = 200, fps = 20, width = 1200, height = 1000, res = 200, 
           end_pause = 1,
           renderer = gifski_renderer())
+
+
+
+
+
+# multivariate --------------------------------------------------------------------------------
+
+# logit-vals
+mod_binom2 <- glm(human_presence ~ size + forest_cover, 
+                 data = dat_div_fin, 
+                 family = binomial)
+
+
+plot_3d <- dat_div_fin %>% 
+  add_column(pred_val = predict(mod_binom2, type = "response")) %>% 
+  ggplot(aes(size, forest_cover,
+           fill = pred_val)) +
+  geom_point(shape = 21, colour = "grey20", 
+             size = 2) +
+  scale_fill_gradient2(low = "#155560", 
+                       mid = "lightgreen", 
+                       midpoint = 0.5,
+                       high = "coral3", 
+                       labels = scales::percent_format()) +
+  theme_minimal() +
+  labs(x = "Inselgröße [km]", 
+       y = "Proportionale Waldbedeckung",
+       fill = "P(Menschenpräsenz)")
+
+
+# save into figures folder
+ggsave(plot = plot_3d, filename = "diversity_glm_9.png", path = here("figures"), bg = "white",
+       width = 200, height = 100, units = "mm")
