@@ -131,9 +131,9 @@ dat_pred <- data.frame("size" = seq(min(dat_div$size),
                                     max(dat_div$size), 
                                     0.1))
 # vorhersage lineares modell
-dat_pred$lin_pred <- predict(mod_4, newdata = dat_pred)
+dat_pred$lin_pred <- predict(mod3, newdata = dat_pred)
 # vorhersage generalisiertes modell
-dat_pred$glm_pred <- predict(mod_5, newdata = dat_pred, 
+dat_pred$glm_pred <- predict(mod4, newdata = dat_pred, 
                              type = "response")
 
 # visualisierung
