@@ -10,8 +10,8 @@ here()
 # lade den datensatz aus dem unterordner data/
 dat_div <- readRDS(here("data", "island_diversity.rds"))
 
-# Verwende die Funktion mean(), um den Mittelwert der „size“ (Inselgröße in km²) über alle Beobachtungen zu berechnen.
-# Füge deinen Code unten ein:
+# berechne mit mean() den mittelwert der zielvariable diversity (artenanzahl)
+# über alle inseln. ergänze deinen code:
 
 
 # erstelle mit lm() ein konstantmodell mit diversity als zielvariable.
@@ -21,10 +21,10 @@ mod1 <-
 # untersuche das modell mit summary().
 # stimmt der geschätzte intercept mit dem zuvor berechneten mittelwert überein?
   
- 
-# Modelliere den Mittelwert über alle Beobachtungen mit einem linearen Modell, 
-# das nur einen Achsenabschnitt (Intercept) enthält.
-# Weise dieses Modell der Variable mod1 zu.
+  
+# erstelle ein lineares modell mit diversity als zielvariable (y)
+# und size (inselgröße) als erklärvariable (x). speichere es als mod2.
+# die frage lautet: wie verändert sich die erwartete artenanzahl mit der inselgröße?
 mod2 <-
   
 # untersuche das modell mit summary().
