@@ -23,18 +23,18 @@ mean(dat_div$size)
 # das nur einen Achsenabschnitt (Intercept) enthält.
 # Weise dieses Modell der Variable mod1 zu.
 mod1 <- lm(size ~ 1, data = dat_div)
-  
+
 # Verwende die Funktion summary(), um dir die Ausgabe des Modells anzusehen.
 # Vergleiche den geschätzten Intercept mit dem Mittelwert, den du oben berechnet hast.
 # Gibt uns das Modell denselben Mittelwert zurück?
 summary(mod1)
-  
+
 # Fitte nun ein lineares Modell mit „diversity“ als abhängiger Variable 
 # und „island size“ (Inselgröße in km²) als erklärender Variable.
 # Damit fragen wir explizit: Wie verändert sich die Diversität mit der Größe der Insel?
 # Weise dieses Modell der Variable mod2 zu.
 mod2 <- lm(diversity ~ size, data = dat_div)
-  
+
 # Verwende erneut die Funktion summary(), um dir die Modellergebnisse anzusehen.
 # Wie interpretierst du die Ergebnisse des Modells?
 summary(mod2)

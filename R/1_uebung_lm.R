@@ -1,48 +1,42 @@
-# Das here-Package ist eine der besten Erfindungen im R-Universum. 
-# Es ermöglicht, den Speicherort einer .Rproj-Datei als Referenzpunkt (root directory) zu verwenden. 
-# Das bedeutet, dass du nie wieder manuell dein Arbeitsverzeichnis setzen musst – 
-# du kannst einfach here() verwenden.
+# das here-paket erlaubt uns, dateipfade relativ zum projektstamm zu verwenden.
+# dadurch müssen wir das arbeitsverzeichnis nicht für jeden computer neu setzen.
 
-
-# lade das here-Package
+# lade das here-paket
 library(here)
 
-# überprüfe, auf welches Verzeichnis dein root directory zeigt
+# überprüfe den erkannten projektstamm
 here()
 
-# Der Datensatz, den wir verwenden, befindet sich im Unterordner data/ 
-# und heißt "island_diversity.rds".
-# Mit der Funktion here() können wir ihn folgendermaßen laden und einer Variable zuweisen:
+# lade den datensatz aus dem unterordner data/
 dat_div <- readRDS(here("data", "island_diversity.rds"))
 
-# Verwende die Funktion mean(), um den Mittelwert der Dauer über alle Beobachtungen zu berechnen.
+# Verwende die Funktion mean(), um den Mittelwert der „size“ (Inselgröße in km²) über alle Beobachtungen zu berechnen.
 # Füge deinen Code unten ein:
 
 
+# erstelle mit lm() ein konstantmodell mit diversity als zielvariable.
+# das modell soll nur einen intercept enthalten und mod1 heißen.
+mod1 <-
+  
+# untersuche das modell mit summary().
+# stimmt der geschätzte intercept mit dem zuvor berechneten mittelwert überein?
+  
+ 
 # Modelliere den Mittelwert über alle Beobachtungen mit einem linearen Modell, 
 # das nur einen Achsenabschnitt (Intercept) enthält.
 # Weise dieses Modell der Variable mod1 zu.
-mod1 <- 
+mod2 <-
   
-# Verwende die Funktion summary(), um dir die Ausgabe des Modells anzusehen.
-# Vergleiche den geschätzten Intercept mit dem Mittelwert, den du oben berechnet hast.
-# Gibt uns das Modell denselben Mittelwert zurück?
-  
-  
-# Fitte nun ein lineares Modell mit „diversity“ als abhängiger Variable 
-# und „island size“ (Inselgröße in km²) als erklärender Variable.
-# Damit fragen wir explizit: Wie verändert sich die Diversität mit der Größe der Insel?
-# Weise dieses Modell der Variable mod2 zu.
+# untersuche das modell mit summary().
+# wie interpretierst du intercept und steigung?
   
   
-# Verwende erneut die Funktion summary(), um dir die Modellergebnisse anzusehen.
-# Wie interpretierst du die Ergebnisse des Modells?
+# zeichne mit plot() die inselgröße (x-achse) gegen die artenanzahl (y-achse).
+# nutze xlab und ylab für verständliche achsenbeschriftungen.
   
   
-# plote die Daten mithilfe der plot() Funktion. Als erstes müssen wir bestimmen was 
-# auf die x-Achse (dat_div$size) und was auf die y-Achse (dat_div$diversity) kommt. 
-# Die Achsen können wir mit den Argumenten xlab = "" und ylab = "" beschriften. 
-
+# ergänze mit abline() zuerst die horizontale mittelwertlinie aus mod1.
+# zeichne danach die ansteigende regressionslinie aus mod2 ein.
   
-# Füge eine Regressionslinie mithilfe der Funktion abline() hinzu. 
-# Verwende hierfür mod1 als Argument
+  
+  
